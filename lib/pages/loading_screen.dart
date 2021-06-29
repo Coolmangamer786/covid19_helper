@@ -30,7 +30,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Container(child: Center(
     child: SpinKitDoubleBounce(
       size: 100,
-      color: Colors.red,
+      color: Colors.pink,
       // color: Theme.of(context).accentColor,
     ),
       ),),
