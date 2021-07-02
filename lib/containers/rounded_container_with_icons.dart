@@ -23,7 +23,7 @@ class RoundedContainer2 extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        height: 85,
+        height: 75,
         // width: MediaQuery.of(context).size.width * .8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

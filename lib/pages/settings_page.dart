@@ -1,10 +1,9 @@
-
 import 'package:covid19_helper/theme_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../constants.dart';
 
+import '../constants.dart';
 
 class UserSettings extends StatefulWidget {
   UserSettings({Key? key}) : super(key: key);
@@ -37,40 +36,45 @@ class _UserSettingsState extends State<UserSettings> {
       if (select == 'Switch Theme') {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => ThemeChanger()));
-      }
-      else if (select == 'Report a problem') {
+      } else if (select == 'Report a problem') {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => buildDemos(context, select)));
-      }
-      else if (select == 'How to Use') {
+            context,
+            MaterialPageRoute(
+                builder: (context) => buildDemos(context, select)));
+      } else if (select == 'How to Use') {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => buildDemos(context, select)));
-      }
-      else if (select == 'Donation') {
+            context,
+            MaterialPageRoute(
+                builder: (context) => buildDemos(context, select)));
+      } else if (select == 'Donation') {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => buildDemos(context, select)));
-      }
-      else if (select == 'Request a feature') {
+            context,
+            MaterialPageRoute(
+                builder: (context) => buildDemos(context, select)));
+      } else if (select == 'Request a feature') {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => buildDemos(context, select)));
-      }
-      else if (select =='About') {
+            context,
+            MaterialPageRoute(
+                builder: (context) => requestFeature(
+                      context,
+                    )));
+      } else if (select == 'About') {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => buildDemos(context, select)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => buildDemos(context, select)));
       }
-   
     }
 
-    final Color bgColor = Theme.of(context).accentColor == Colors.indigo
-        ? kBlackBack
-        : kPinkCont;
+    final Color bgColor =
+        Theme.of(context).accentColor == KTealLight ? kBlackBack : kPinkCont;
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
         backgroundColor: bgColor,
       ),
       body: ListView.builder(
-        physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           itemCount: setting.length,
           itemBuilder: (BuildContext context, int i) {
             return ListTile(
@@ -84,7 +88,34 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-  Widget buildDemos(BuildContext context,String selectName) {
-    return Container(child: Center(child: Text('Working on $selectName')),);
+  Widget buildDemos(BuildContext context, String selectName) {
+    return Container(
+      child: Center(child: Text('Working on $selectName')),
+    );
+  }
+
+  Widget requestFeature(BuildContext context) {
+    String sub = '';
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Request a feature'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              maxLines: 5,
+              maxLength: 200,
+              onChanged: (value) {
+                sub = value;
+                print(value);
+              },
+            ),
+          ),
+          ElevatedButton(onPressed: () {}, child: Text('Submit'))
+        ],
+      ),
+    );
   }
 }

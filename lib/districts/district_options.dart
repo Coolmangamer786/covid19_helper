@@ -11,7 +11,7 @@ class DistrictOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String districtName = "";
-       final Color appBarColor=Theme.of(context).accentColor == Colors.indigo?
+       final Color appBarColor=Theme.of(context).accentColor == KTealLight?
     kBlackBack:kPinkCont;
     List dist = districtNameChecker(shortName);
     return Scaffold(

@@ -10,8 +10,9 @@ class Webpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(pageName
+        title: Text(pageName,
         ),
+        backgroundColor: Theme.of(context).accentColor,
       ),
       body: SafeArea(
         child: WebView(

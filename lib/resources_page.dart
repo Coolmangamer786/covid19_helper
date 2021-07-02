@@ -11,7 +11,7 @@ class ResourcesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color appBarColor =
-        Theme.of(context).accentColor == Colors.indigo ? kBlackBack : kPinkCont;
+        Theme.of(context).accentColor == KTealLight ? kBlackBack : kPinkCont;
     // final Color manyIconColor = Theme.of(context).accentColor == Colors.indigo
     //     ? kSomewhatWhite
     //     : Colors.black;

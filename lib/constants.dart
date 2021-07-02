@@ -8,6 +8,8 @@ const kSomewhatWhite = Color(0xFFFFFFFF);
 
 const Fullwhite = Color(0xFFFFFFFF);
 
+const KTealLight = Color(0xff45a5a6);
+
 const kPinkCont = Color(0xFFef476f);
 const kYellowCont = Color(0xFFffd166);
 const kGreenCont = Color(0xFF06d6a0);

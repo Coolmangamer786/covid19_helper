@@ -8,7 +8,8 @@ class RoundedContainer extends StatelessWidget {
       {required this.boxColor,
       required this.borderColor,
       required this.item,
-      required this.data});
+      required this.data,
+      });
   final Color boxColor;
   final Color borderColor;
   final String item;

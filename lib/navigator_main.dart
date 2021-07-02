@@ -37,7 +37,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     final Color decide = Theme.of(context).accentColor;
-    final Color color = decide == Colors.indigo ? Colors.indigo : kPinkCont;
+    final Color color = decide == KTealLight ? KTealLight : kPinkCont;
     return Scaffold(
       body: StreamBuilder(
         stream: Connectivity().onConnectivityChanged,

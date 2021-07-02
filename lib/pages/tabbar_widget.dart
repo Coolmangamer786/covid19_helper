@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class MyDemo extends StatelessWidget {
  @override
   Widget build(BuildContext context) {
-    final Color bgColor = Theme.of(context).accentColor == Colors.indigo ? kBlackBack: kPinkCont;
+    final Color bgColor = Theme.of(context).accentColor == KTealLight ? kBlackBack: kPinkCont;
     return DefaultTabController(
       initialIndex: 0,
       length: 2,

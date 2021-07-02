@@ -1,6 +1,7 @@
 import 'package:covid19_helper/api_methods/api_methods.dart';
 import 'package:covid19_helper/containers/rounded_container.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../constants.dart';
 
@@ -9,23 +10,101 @@ class DisplayCases extends StatelessWidget {
   DisplayCases({Key? key, required this.dist, required this.state})
       : super(key: key);
   String dist, state;
-
-
+  
 
   @override
   Widget build(BuildContext context) {
-    final Color bgColor = Theme.of(context).accentColor == Colors.indigo
+    final Color bgColor = Theme.of(context).accentColor == KTealLight
         ? kBlackBack
         : kSomewhatWhite;
-    final Color textColor = Theme.of(context).accentColor == Colors.indigo
+    final Color textColor = Theme.of(context).accentColor == KTealLight
         ? kSomewhatWhite
         : kBlackBack;
-    final Color appBarColor=Theme.of(context).accentColor == Colors.indigo?
-    kBlackBack:kPinkCont;
+    final Color appBarColor =
+        Theme.of(context).accentColor == KTealLight ? kBlackBack : kPinkCont;
+
+    displayMore(
+      String topic,
+      int data,
+      String desc,
+      String stateSelected,
+    ) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                Center(
+                  child: TextButton(
+                      onPressed: () => Navigator.pop(
+                            context,
+                          ),
+                      child: Text('Ok I will take safety measures 😷')),
+                )
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(topic),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Currently $topic in $stateSelected are : -'),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      data.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                  ),
+                  Text(
+                    desc,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(dist),
-        backgroundColor:appBarColor,
+        backgroundColor: appBarColor,
+        actions: [IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('How to use'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '📌 Click on the -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\n📌 Above options May not be available if no data is provided from the related District.',
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('ok'))
+                      ],
+                    );
+                  });
+            },
+            icon: FaIcon(
+              FontAwesomeIcons.infoCircle,
+              color: textColor,
+            ),
+          ),],
       ),
       body: Container(
         color: bgColor,
@@ -50,107 +129,156 @@ class DisplayCases extends StatelessWidget {
                           //   padding: const EdgeInsets.all(8.0),
                           //   child: Text(stateSelected,style: kSubHeadText.copyWith(color:textColor),),
                           // ),
-                          
 
-                          RoundedContainer(
-                            borderColor: kPinkCont,
-                            item: 'CONFIRMED CASES',
-                            data: snapshot.data[index].confirmed.toString(),
-                            boxColor: bgColor,
-                          ),
-                          RoundedContainer(
-                            borderColor: kYellowCont,
-                            item: 'RECOVERED CASES',
-                            data: snapshot.data[index].recovered.toString(),
-                            boxColor: bgColor,
-                          ),
-
-                          RoundedContainer(
-                            borderColor: kGreenCont,
-                            item: 'Testings',
-                            data: snapshot.data[index].tested.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Confirmed Cases',
+                                  snapshot.data[index].confirmed,
+                                  'Please be Stay Safe 🔒 and get Vaccinated 💉 as soon as possible.',
+                                  dist);
+                            },
+                            child: RoundedContainer(
+                              
+                              borderColor: kPinkCont,
+                              item: 'CONFIRMED CASES',
+                              data: snapshot.data[index].confirmed.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          RoundedContainer(
-                            borderColor: kBlueCont,
-                            item: 'Vaccinated',
-                            data: snapshot.data[index].vaccinated.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Recovered Cases',
+                                  snapshot.data[index].recovered,
+                                  'Never loose hope we can always get Recovered 💝 Stay Strong 💪 we will fight together against the Virus 👿.',
+                                  dist);
+                            },
+                            child: RoundedContainer(
+                               
+                              borderColor: kYellowCont,
+                              item: 'RECOVERED CASES',
+                              data: snapshot.data[index].recovered.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          RoundedContainer(
-                            borderColor: kVioletCont,
-                            item: 'Decreased',
-                            data: snapshot.data[index].deceased.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Testings Done',
+                                  snapshot.data[index].tested,
+                                  'For Testings please TESTING 🔥 visit  on Resources 🐻.',
+                                  dist);
+                            },
+                            child: RoundedContainer(
+                               
+                              borderColor: kGreenCont,
+                              item: 'Testings',
+                              data: snapshot.data[index].tested.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                          title: Text(
-                                            'Vaccine Status : ',
-                                          ),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Dose 1 :',
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    snapshot.data[index].dose1
-                                                        .toString(),
-                                                  )
-                                                ],
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        title: Text(
+                                          'Vaccine Status : ',
+                                        ),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Dose 1 :',
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  snapshot.data[index].dose1
+                                                      .toString(),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Dose 2 :',
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  snapshot.data[index].dose2
+                                                      .toString(),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Total  :',
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  snapshot
+                                                      .data[index].vaccinated
+                                                      .toString(),
+                                                )
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Take Your Vaccine 💉 soon cause it free and it effective ⚡ for fighting against the Virus 👿.',
+                                                textAlign: TextAlign.center,
                                               ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Dose 2 :',
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    snapshot.data[index].dose2
-                                                        .toString(),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            // TextButton(
-                                            //   onPressed: () => Navigator.pop(
-                                            //       context, 'Cancel'),
-                                            //   child: const Text('Cancel'),
-                                            // ),
-                                            TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    context, 'OK'),
-                                                child: const Text('OK'))
+                                            )
                                           ],
-                                        ));
-                              },
-                              child: Text(
-                                'Click Here for  Vaccine Status',
-                                style: TextStyle(color: textColor),
-                              )),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context, 'OK'),
+                                              child: const Text('OK'))
+                                        ],
+                                      ));
+                            },
+                            child: RoundedContainer(
+                               
+                              borderColor: kBlueCont,
+                              item: 'Vaccinated',
+                              data: snapshot.data[index].vaccinated.toString(),
+                              boxColor: bgColor,
+                            ),
+                          ),
 
-                          // ElevatedButton(
-                          //     onPressed: () {
-                          //       // Navigator.push(
-                          //       //     context,
-                          //       //     MaterialPageRoute(
-                          //       //         builder: (context) =>
-                          //       //             UserSettings()));
-                          //     },
-                          //     child: Text('Settings'))
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Deaths',
+                                  snapshot.data[index].deceased,
+                                  'We have lost lot of peoples in our surrounding,Please be Safe 🔒 and Take Safety precautions',
+                                  dist);
+                            },
+                            child: RoundedContainer(
+                               
+                              borderColor: kVioletCont,
+                              item: 'Decreased',
+                              data: snapshot.data[index].deceased.toString(),
+                              boxColor: bgColor,
+                            ),
+                          ),
+
+                        
                         ],
                       ),
                     );

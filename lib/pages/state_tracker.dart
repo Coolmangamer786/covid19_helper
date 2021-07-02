@@ -5,6 +5,7 @@ import 'package:covid19_helper/state_changer.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StateTracker extends StatefulWidget {
   const StateTracker({Key? key}) : super(key: key);
@@ -15,7 +16,9 @@ class StateTracker extends StatefulWidget {
 
 class _StateTrackerState extends State<StateTracker> {
   String stateSelected = '';
-
+  late int vacc, recc, test = 0, con = 0, dec = 0, d1 = 0, d2 = 0;
+  bool buttonPressed = false;
+  var today = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -64,12 +67,121 @@ class _StateTrackerState extends State<StateTracker> {
 
   @override
   Widget build(BuildContext context) {
-    final Color bgColor = Theme.of(context).accentColor == Colors.indigo
+    final Color bgColor = Theme.of(context).accentColor == KTealLight
         ? kBlackBack
         : kSomewhatWhite;
-    final Color textColor = Theme.of(context).accentColor == Colors.indigo
+    final Color textColor = Theme.of(context).accentColor == KTealLight
         ? kSomewhatWhite
         : kBlackBack;
+
+    showVaccineStatus(int dose1, int dose2, int total) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                title: Text(
+                  'Vaccine Status : ',
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Dose 1 :',
+                        ),
+                        Spacer(),
+                        Text(
+                          dose1.toString(),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Dose 2 :',
+                        ),
+                        Spacer(),
+                        Text(
+                          dose2.toString(),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Total  :',
+                        ),
+                        Spacer(),
+                        Text(
+                          total.toString(),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Take Your Vaccine 💉 soon cause it free and it is also effective ⚡ for fighting against the Virus 👿.',
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'))
+                ],
+              ));
+    }
+
+    displayMore(
+      String topic,
+      int data,
+      String desc,
+    ) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                Center(
+                  child: TextButton(
+                      onPressed: () => Navigator.pop(
+                            context,
+                          ),
+                      child: Text('Ok I will take safety measures 😷')),
+                )
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(topic),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Currently $topic in $stateSelected are : -'),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      data.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                  ),
+                  Text(
+                    desc,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +192,46 @@ class _StateTrackerState extends State<StateTracker> {
         ),
         elevation: 0,
         backgroundColor: bgColor,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showVaccineStatus(d1, d2, vacc);
+            },
+            icon: FaIcon(FontAwesomeIcons.syringe),
+            color: textColor,
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('How to use'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '📌 Click on the -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\nChange State using the Dropdown Menu 🔻.',
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('ok'))
+                      ],
+                    );
+                  });
+            },
+            icon: FaIcon(
+              FontAwesomeIcons.infoCircle,
+              color: textColor,
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: bgColor,
@@ -105,39 +257,87 @@ class _StateTrackerState extends State<StateTracker> {
                           //   padding: const EdgeInsets.all(8.0),
                           //   child: Text(stateSelected,style: kSubHeadText.copyWith(color:textColor),),
                           // ),
-                          RoundedContainer(
-                            borderColor: kPinkCont,
-                            item: 'CONFIRMED CASES',
-                            data: snapshot.data[index].confirmed.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Confirmed Cases',
+                                  snapshot.data[index].confirmed,
+                                  'Please be Stay Safe 🔒 and get Vaccinated 💉 as soon as possible.');
+                            },
+                            child: RoundedContainer(
+                              borderColor: kPinkCont,
+                              item: 'CONFIRMED CASES',
+                              data: snapshot.data[index].confirmed.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
-                          RoundedContainer(
-                            borderColor: kYellowCont,
-                            item: 'RECOVERED CASES',
-                            data: snapshot.data[index].recovered.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Recovered Cases',
+                                  snapshot.data[index].recovered,
+                                  'Never loose hope we can always get Recovered 💝 Stay Strong 💪 we will fight together against the Virus 👿.');
+                            },
+                            child: RoundedContainer(
+                              borderColor: kYellowCont,
+                              item: 'RECOVERED CASES',
+                              data: snapshot.data[index].recovered.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          RoundedContainer(
-                            borderColor: kGreenCont,
-                            item: 'Testings',
-                            data: snapshot.data[index].tested.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Testings Done',
+                                  snapshot.data[index].tested,
+                                  'For Testings please TESTING 🔥 visit  on Resources 🐻.');
+                            },
+                            child: RoundedContainer(
+                              borderColor: kGreenCont,
+                              item: 'Testings',
+                              data: snapshot.data[index].tested.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          RoundedContainer(
-                            borderColor: kBlueCont,
-                            item: 'Vaccinated',
-                            data: snapshot.data[index].vaccinated.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              showVaccineStatus(
+                                  snapshot.data[index].dose1,
+                                  snapshot.data[index].dose2,
+                                  snapshot.data[index].vaccinated);
+                            },
+                            child: RoundedContainer(
+                              borderColor: kBlueCont,
+                              item: 'Vaccinated',
+                              data: snapshot.data[index].vaccinated.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
 
-                          RoundedContainer(
-                            borderColor: kVioletCont,
-                            item: 'Decreased',
-                            data: snapshot.data[index].deceased.toString(),
-                            boxColor: bgColor,
+                          GestureDetector(
+                            onTap: () {
+                              displayMore(
+                                  'Deaths',
+                                  snapshot.data[index].deceased,
+                                  'We have lost lot of peoples in our surrounding,Please be Safe 🔒 and Take Safety precautions');
+                            },
+                            child: RoundedContainer(
+                              borderColor: kVioletCont,
+                              item: 'Decreased',
+                              data: snapshot.data[index].deceased.toString(),
+                              boxColor: bgColor,
+                            ),
                           ),
+                          shareData(
+                              snapshot.data[index].confirmed,
+                              snapshot.data[index].recovered,
+                              snapshot.data[index].tested,
+                              snapshot.data[index].vaccinated,
+                              snapshot.data[index].dose1,
+                              snapshot.data[index].dose2,
+                              snapshot.data[index].deceased),
                           Container(
                             // decoration: BoxDecoration(color: Colors.black,borderRadius: BorderRadius.circular(20)),
                             child: Padding(
@@ -164,71 +364,6 @@ class _StateTrackerState extends State<StateTracker> {
                               ),
                             ),
                           ),
-
-                          TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                          title: Text(
-                                            'Vaccine Status : ',
-                                          ),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Dose 1 :',
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    snapshot.data[index].dose1
-                                                        .toString(),
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Dose 2 :',
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    snapshot.data[index].dose2
-                                                        .toString(),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            // TextButton(
-                                            //   onPressed: () => Navigator.pop(
-                                            //       context, 'Cancel'),
-                                            //   child: const Text('Cancel'),
-                                            // ),
-                                            TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    context, 'OK'),
-                                                child: const Text('OK'))
-                                          ],
-                                        ));
-                              },
-                              child: Text(
-                                'Check Vaccine Status',
-                                style: TextStyle(color: textColor),
-                              )),
-
-                          // ElevatedButton(
-                          //     onPressed: () {
-                          //       Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //               builder: (context) => ResourcesPage()));
-                          //     },
-                          //     child: Text('Resources'))
                         ],
                       ),
                     );
@@ -238,9 +373,24 @@ class _StateTrackerState extends State<StateTracker> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          print(
+              'Conf : ${con.toString()}, \n Rec: ${recc.toString()},${test.toString()},${vacc.toString()},${d1.toString()},${d2.toString()},${dec.toString()}');
+        },
         child: Icon(Icons.share),
       ),
     );
+  }
+
+  shareData(int confirmed, int recovered, int tests, int vaccinated, int dose1,
+      int dose2, int decrease) {
+    con = confirmed;
+    recc = recovered;
+    test = tests;
+    vacc = vaccinated;
+    d1 = dose1;
+    d2 = dose2;
+    dec = decrease;
+    return SizedBox();
   }
 }

@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 class ThemeChanger extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String mode=Theme.of(context).accentColor==Colors.indigo?'Dark Mode':'Light Mode';
-    final Color appBarColor=Theme.of(context).accentColor == Colors.indigo?
+    final String mode=Theme.of(context).accentColor==KTealLight?'Dark Mode':'Light Mode';
+    final Color appBarColor=Theme.of(context).accentColor == KTealLight?
     kBlackBack:kPinkCont;
     return Scaffold(
       appBar: AppBar(
@@ -34,16 +34,13 @@ class ThemeChanger extends StatelessWidget {
               Card(
                 child: ListTile(
                   title: Text(
-                      "Your are currently using $mode."),
+                      "You are currently using $mode."),
                 ),
               ),
              
             ]),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.share),
-          backgroundColor: Theme.of(context).accentColor),
+  
     );
   }
 }
