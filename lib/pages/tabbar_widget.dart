@@ -4,6 +4,7 @@ import 'package:covid19_helper/constants.dart';
 import 'package:covid19_helper/districts/district_tracker.dart';
 import 'package:covid19_helper/pages/state_tracker.dart';
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class MyDemo extends StatelessWidget {
  @override
@@ -33,7 +34,7 @@ class MyDemo extends StatelessWidget {
         ),
         body:  TabBarView(
           children: <Widget>[
-            StateTracker(),
+            ShowCaseWidget(builder: Builder(builder:(context)=> StateTracker(),),),
             DistrictTracker(),
             // UserNetworkPage()
             // Center(

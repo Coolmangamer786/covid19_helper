@@ -1,6 +1,3 @@
-
-
-
 import 'package:connectivity/connectivity.dart';
 import 'package:covid19_helper/constants.dart';
 import 'package:covid19_helper/pages/homepage.dart';
@@ -26,10 +23,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     // Welcome(),
     // StateTracker(),
     // UsefulLinks(),
-    ShowCaseWidget(builder: Builder(builder:(context)=> Homepage(),),),
+    ShowCaseWidget(
+      builder: Builder(
+        builder: (context) => Homepage(),
+      ),
+    ),
     MyDemo(),
-    ResourcesPage(),
-    ShowCaseWidget(builder: Builder(builder:(context)=> UserSettings(),),),
+    ShowCaseWidget(
+      builder: Builder(
+        builder: (context) => ResourcesPage(),
+      ),
+    ),
+    UserSettings(),
   ];
 
   void _onItemTapped(int index) {

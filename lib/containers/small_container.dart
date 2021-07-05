@@ -16,11 +16,12 @@ class SmallContainer extends StatelessWidget {
     // final Color textColor = Theme.of(context).accentColor == Colors.indigo
     //     ? kSomewhatWhite
     //     : kBlackBack;
-
+  var height1 = MediaQuery.of(context).size.height;
+   
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 140,
+        height: height1<640?100:140,
         width: MediaQuery.of(context).size.width * 40 / 100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,7 +29,7 @@ class SmallContainer extends StatelessWidget {
           children: [
             FaIcon(
               icon,
-              size: 50,
+              size: height1<640?30:50,
               color:Colors.white,
             ),
             SizedBox(
@@ -37,7 +38,7 @@ class SmallContainer extends StatelessWidget {
             Text(
               item.toUpperCase(),
               textAlign: TextAlign.center,
-              style: kSubHeadText.copyWith(color: Colors.white, fontSize: 20),
+              style: kSubHeadText.copyWith(color: Colors.white, fontSize: height1<640?16:20),
             ),
           ],
         ),

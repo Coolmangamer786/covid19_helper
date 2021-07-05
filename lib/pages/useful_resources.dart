@@ -83,7 +83,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
               icon: FaIcon(FontAwesomeIcons.shareSquare),
               onPressed: () {
                 Share.share(
-                    '📌 For ${widget.name} \n🔥 Visit : ${user.name}\n⚡ link : ${user.links} \n\n 🎯 For more download the app today. https://play.google.com');
+                    '📌 For ${widget.name} \n🔥 Visit : ${user.name}\n⚡ link : ${user.links} \n\n 🎯 For more download the app today. https://play.google.com',subject: 'For latest ${widget.name}');
               },
             ),
           );

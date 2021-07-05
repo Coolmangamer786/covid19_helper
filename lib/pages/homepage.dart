@@ -4,6 +4,7 @@ import 'package:covid19_helper/containers/rounded_container_with_icons.dart';
 import 'package:covid19_helper/pages/testings.dart';
 import 'package:covid19_helper/pages/useful_resources.dart';
 import 'package:covid19_helper/webpage/webpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:showcaseview/showcaseview.dart';
 import 'package:flutter/material.dart';
@@ -24,21 +25,45 @@ class _HomepageState extends State<Homepage> {
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
   GlobalKey _five = GlobalKey();
- @override
-  void initState() {
-    super.initState();
+//  @override
+//   void initState() {
+//     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) => ShowCaseWidget.of(context)!.startShowCase([
-        _one,_two,_three,_four,_five
-      ]),
-    );
-  }
+//     WidgetsBinding.instance!.addPostFrameCallback(
+//       (_) => ShowCaseWidget.of(context)!.startShowCase([
+//         _one,_two,_three,_four,_five
+//       ]),
+//     );
+//   }
   @override
   Widget build(BuildContext context) {
     final Color decide = Theme.of(context).accentColor;
     final Color bgColor = decide == KTealLight ? kBlackBack : kSomewhatWhite;
     final Color txtColor = decide == KTealLight ? Colors.white : Colors.black;
+    SharedPreferences preferences;
+
+    displayShowcase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool? showcaseVisibilityStatus = preferences.getBool("showShowcase");
+      if (showcaseVisibilityStatus == null) {
+        preferences.setBool("showShowcase", false).then((bool success) {
+          if (success)
+            print("Success ");
+          else
+            print("An error occured");
+        });
+        return true;
+      }
+      return false;
+    }
+
+    displayShowcase().then((status) {
+      if (status) {
+        ShowCaseWidget.of(context)!
+            .startShowCase([_one, _two, _three, _four, _five]);
+      }
+    });
+
     return SafeArea(
       child: Scaffold(
         body: ListView.builder(
@@ -60,12 +85,10 @@ class _HomepageState extends State<Homepage> {
                         children: [
                           HomepageText(
                             title: 'welcome'.toUpperCase(),
-                            size: 40,
                             txtColor: txtColor,
                           ),
                           HomepageText(
                             title: 'get'.toUpperCase(),
-                            size: 40,
                             txtColor: txtColor,
                           ),
                           Padding(
@@ -110,9 +133,12 @@ class _HomepageState extends State<Homepage> {
                     ),
                     Container(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Showcase(key: _one,description: 'Click here for Vaccine Registration',
+                          Showcase(
+                            key: _one,
+                            description: 'Click here for Vaccine Registration',
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
@@ -173,7 +199,8 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                           ),
-                          Showcase(key: _four,
+                          Showcase(
+                            key: _four,
                             description: "Click Here for Do's and dont's ",
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -196,7 +223,8 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                           ),
-                          Showcase(key: _five,
+                          Showcase(
+                            key: _five,
                             description: 'Click Here for Helpful Spreadsheets ',
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -230,24 +258,20 @@ class _HomepageState extends State<Homepage> {
 }
 
 class HomepageText extends StatelessWidget {
-  const HomepageText(
-      {Key? key,
-      required this.title,
-      required this.size,
-      required this.txtColor})
+  const HomepageText({Key? key, required this.title, required this.txtColor})
       : super(key: key);
   final String title;
-  final double size;
+
   final Color txtColor;
   @override
   Widget build(BuildContext context) {
+    var height1 = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Text(
         title,
         style: GoogleFonts.bebasNeue(
-            textStyle:
-                kContTextStyle.copyWith(color: txtColor, fontSize: size)),
+            textStyle: kContTextStyle.copyWith(color: txtColor, fontSize: 40)),
       ),
     );
   }

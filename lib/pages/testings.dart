@@ -22,7 +22,7 @@ class _TestingsState extends State<Testings> {
   @override
   Widget build(BuildContext context) {
     final Color bgColor =
-        Theme.of(context).accentColor == Colors.indigo ? kBlackBack : kPinkCont;
+        Theme.of(context).accentColor == KTealLight? kBlackBack : kPinkCont;
 
     return DefaultTabController(
       initialIndex: 0,

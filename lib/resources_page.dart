@@ -3,29 +3,63 @@ import 'package:covid19_helper/pages/testings.dart';
 import 'package:covid19_helper/pages/useful_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import 'constants.dart';
 
-class ResourcesPage extends StatelessWidget {
+class ResourcesPage extends StatefulWidget {
   const ResourcesPage({Key? key}) : super(key: key);
 
   @override
+  _ResourcesPageState createState() => _ResourcesPageState();
+}
+
+class _ResourcesPageState extends State<ResourcesPage> {
+  GlobalKey _eleven = GlobalKey();
+  GlobalKey _twelve = GlobalKey();
+  GlobalKey _thirteen = GlobalKey();
+  GlobalKey _fourteen = GlobalKey();
+  GlobalKey _fifteen = GlobalKey();
+  GlobalKey _sixteen = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
+  
     final Color appBarColor =
         Theme.of(context).accentColor == KTealLight ? kBlackBack : kPinkCont;
-    // final Color manyIconColor = Theme.of(context).accentColor == Colors.indigo
-    //     ? kSomewhatWhite
-    //     : Colors.black;
-    // final Color manyTextColor = Theme.of(context).accentColor == Colors.indigo
-    //     ? Colors.black
-    //     : Colors.white;
+
+    SharedPreferences preferences;
+
+    displayShowcase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool? showcaseVisibilityStatus = preferences.getBool("showShowcase2");
+      if (showcaseVisibilityStatus == null) {
+        preferences.setBool("showShowcase2", false).then((bool success) {
+          if (success)
+            print("Success ");
+          else
+            print("An error occured");
+        });
+        return true;
+      }
+      return false;
+    }
+
+    displayShowcase().then((status) {
+      if (status) {
+        ShowCaseWidget.of(context)!.startShowCase(
+            [_eleven, _twelve, _thirteen, _fourteen, _fifteen, _sixteen]);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Useful Resources'),
         backgroundColor: appBarColor,
       ),
       body: ListView.builder(
-        physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           itemCount: 1,
           itemBuilder: (context, int index) {
             return Container(
@@ -37,10 +71,14 @@ class ResourcesPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Beds',
-                            icon: FontAwesomeIcons.bed,
-                            iconColor: Color(0xfff94144),
+                          child: Showcase(
+                            key: _eleven,
+                            description: 'Click here for bed links',
+                            child: SmallContainer(
+                              item: 'Beds',
+                              icon: FontAwesomeIcons.bed,
+                              iconColor: Color(0xfff94144),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -51,10 +89,14 @@ class ResourcesPage extends StatelessWidget {
                           },
                         ),
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Oxygen',
-                            icon: FontAwesomeIcons.peopleCarry,
-                            iconColor: Color(0xFFf3722c),
+                          child: Showcase(
+                            key: _twelve,
+                            description: 'Click here for oxygen links',
+                            child: SmallContainer(
+                              item: 'Oxygen',
+                              icon: FontAwesomeIcons.peopleCarry,
+                              iconColor: Color(0xFFf3722c),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -70,10 +112,14 @@ class ResourcesPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Plasma',
-                            icon: FontAwesomeIcons.burn,
-                            iconColor: Color(0xfff8961e),
+                          child: Showcase(
+                            key: _thirteen,
+                            description: 'Click here for plasma doners links',
+                            child: SmallContainer(
+                              item: 'Plasma',
+                              icon: FontAwesomeIcons.burn,
+                              iconColor: Color(0xfff8961e),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -84,10 +130,14 @@ class ResourcesPage extends StatelessWidget {
                           },
                         ),
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Medicine',
-                            icon: FontAwesomeIcons.firstAid,
-                            iconColor: Color(0xfff9c74f),
+                          child: Showcase(
+                            key: _fourteen,
+                            description: 'Click here for medicine links',
+                            child: SmallContainer(
+                              item: 'Medicine',
+                              icon: FontAwesomeIcons.firstAid,
+                              iconColor: Color(0xfff9c74f),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -103,10 +153,14 @@ class ResourcesPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Home ICU',
-                            icon: FontAwesomeIcons.hospital,
-                            iconColor: Color(0xff90be6d),
+                          child: Showcase(
+                            key: _fifteen,
+                            description: 'Click here for Home ICU links',
+                            child: SmallContainer(
+                              item: 'Home ICU',
+                              icon: FontAwesomeIcons.hospital,
+                              iconColor: Color(0xff90be6d),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -117,10 +171,15 @@ class ResourcesPage extends StatelessWidget {
                           },
                         ),
                         GestureDetector(
-                          child: SmallContainer(
-                            item: 'Ambulance',
-                            icon: FontAwesomeIcons.ambulance,
-                            iconColor: Color(0xff43aa8b),
+                          child: Showcase(
+                            key: _sixteen,
+                            description:
+                                'Click here for ambulance links \nAlso check ot other buttons too.',
+                            child: SmallContainer(
+                              item: 'Ambulance',
+                              icon: FontAwesomeIcons.ambulance,
+                              iconColor: Color(0xff43aa8b),
+                            ),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -145,8 +204,7 @@ class ResourcesPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>Testings()
-                        ));
+                                    builder: (context) => Testings()));
                           },
                         ),
                         GestureDetector(
@@ -162,7 +220,7 @@ class ResourcesPage extends StatelessWidget {
                                     builder: (context) =>
                                         RedirectedPage(name: 'Doctors')));
                           },
-                        ),//b892ff
+                        ), //b892ff
                       ],
                     ),
                     Row(
@@ -170,10 +228,9 @@ class ResourcesPage extends StatelessWidget {
                       children: [
                         GestureDetector(
                           child: SmallContainer(
-                            item: 'Ngo',
-                            icon: FontAwesomeIcons.home,
-                            iconColor: Color(0xff83c5be)
-                          ),
+                              item: 'Ngo',
+                              icon: FontAwesomeIcons.home,
+                              iconColor: Color(0xff83c5be)),
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -186,8 +243,7 @@ class ResourcesPage extends StatelessWidget {
                           child: SmallContainer(
                             item: 'More',
                             icon: FontAwesomeIcons.infoCircle,
-                            iconColor: Color(0xff48cae4)
-                            ,
+                            iconColor: Color(0xff48cae4),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -230,40 +286,6 @@ class ResourcesPage extends StatelessWidget {
                                         RedirectedPage(name: 'Whatsapp')));
                           },
                         ),
-
-                        // ElevatedButton(
-                        //   onPressed: () {
-
-                        //     Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //             builder: (context) =>
-                        //                 RedirectedPage(name: 'Telegram')));
-
-                        //   },
-                        //   child: Text('Telegram Groups'),
-                        //   style: ButtonStyle(
-                        //     backgroundColor:
-                        //         MaterialStateProperty.all<Color>(Colors.blue),
-                        //   ),
-
-                        // ),
-                        // ElevatedButton(
-                        //   onPressed: () {
-
-                        //     Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //             builder: (context) =>
-                        //                 RedirectedPage(name: 'Whatsapp')));
-
-                        //   },
-                        //   child: Text('Whatsapp Groups'),
-                        //   style: ButtonStyle(
-                        //     backgroundColor:
-                        //         MaterialStateProperty.all<Color>(Colors.green),
-                        //   ),
-                        // )
                       ],
                     )
                   ],
