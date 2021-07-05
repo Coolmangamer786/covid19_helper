@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-context() => context;
 const kRedColorUsing = Color(0xFFe63946);
 const kLightBlue = Color(0xFFa8dadc);
 const kSomewhatWhite = Color(0xFFFFFFFF);

@@ -1,9 +1,10 @@
 import 'package:covid19_helper/api_methods/api_methods.dart';
 import 'package:covid19_helper/api_methods/model.dart';
-import 'package:covid19_helper/pages/testings.dart';
 import 'package:covid19_helper/webpage/webpage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
@@ -60,7 +61,6 @@ class _RedirectedPageState extends State<RedirectedPage> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          
 
           return ListTile(
             onTap: () {
@@ -68,9 +68,6 @@ class _RedirectedPageState extends State<RedirectedPage> {
               if (widget.name == 'Whatsapp' || widget.name == 'Telegram') {
                 print('insid wp or tele');
                 _launchURL(user.links);
-              } else if (widget.name == 'Testings') {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Testings()));
               } else {
                 Navigator.push(
                     context,
@@ -81,8 +78,14 @@ class _RedirectedPageState extends State<RedirectedPage> {
             },
             title: Text(user.name),
             subtitle: Text('Click here to visit'),
-            //leading: Text(index.toString()),
-            
+            // leading: Text('${index+1}'.toString()),
+            trailing: IconButton(
+              icon: FaIcon(FontAwesomeIcons.shareSquare),
+              onPressed: () {
+                Share.share(
+                    '📌 For ${widget.name} \n🔥 Visit : ${user.name}\n⚡ link : ${user.links} \n\n 🎯 For more download the app today. https://play.google.com');
+              },
+            ),
           );
         });
   }

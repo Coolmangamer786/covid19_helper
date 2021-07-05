@@ -20,7 +20,7 @@ class SmallContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 130,
+        height: 140,
         width: MediaQuery.of(context).size.width * 40 / 100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

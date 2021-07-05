@@ -1,3 +1,6 @@
+
+
+
 import 'package:connectivity/connectivity.dart';
 import 'package:covid19_helper/constants.dart';
 import 'package:covid19_helper/pages/homepage.dart';
@@ -8,6 +11,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
@@ -22,10 +26,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     // Welcome(),
     // StateTracker(),
     // UsefulLinks(),
-    Homepage(),
+    ShowCaseWidget(builder: Builder(builder:(context)=> Homepage(),),),
     MyDemo(),
     ResourcesPage(),
-    UserSettings()
+    ShowCaseWidget(builder: Builder(builder:(context)=> UserSettings(),),),
   ];
 
   void _onItemTapped(int index) {

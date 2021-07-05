@@ -13,7 +13,7 @@ primaryColorDark: Colors.black,
     );
 
 ThemeData dark = ThemeData(
-  primaryColor: Colors.indigo,
+  primaryColor: kBlackBack,
   brightness: Brightness.dark,
   accentColor: KTealLight,
 backgroundColor:Colors.black,

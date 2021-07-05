@@ -1,4 +1,5 @@
 import 'package:covid19_helper/containers/small_container.dart';
+import 'package:covid19_helper/pages/testings.dart';
 import 'package:covid19_helper/pages/useful_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -144,8 +145,8 @@ class ResourcesPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        RedirectedPage(name: 'Testings')));
+                                    builder: (context) =>Testings()
+                        ));
                           },
                         ),
                         GestureDetector(

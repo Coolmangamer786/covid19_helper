@@ -3,7 +3,7 @@ import 'package:covid19_helper/constants.dart';
 import 'package:covid19_helper/containers/rounded_container.dart';
 import 'package:covid19_helper/state_changer.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:share/share.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -17,7 +17,6 @@ class StateTracker extends StatefulWidget {
 class _StateTrackerState extends State<StateTracker> {
   String stateSelected = '';
   late int vacc, recc, test = 0, con = 0, dec = 0, d1 = 0, d2 = 0;
-  bool buttonPressed = false;
   var today = DateTime.now();
   @override
   void initState() {
@@ -211,7 +210,7 @@ class _StateTrackerState extends State<StateTracker> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '📌 Click on the -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\nChange State using the Dropdown Menu 🔻.',
+                            '📌 Click on  -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\nChange State using the Dropdown Menu 🔻 \n\nClick on 😎 Share Button to share the data with others.',
                             textAlign: TextAlign.left,
                           ),
                         ],
@@ -257,6 +256,7 @@ class _StateTrackerState extends State<StateTracker> {
                           //   padding: const EdgeInsets.all(8.0),
                           //   child: Text(stateSelected,style: kSubHeadText.copyWith(color:textColor),),
                           // ),
+
                           GestureDetector(
                             onTap: () {
                               displayMore(
@@ -271,6 +271,7 @@ class _StateTrackerState extends State<StateTracker> {
                               boxColor: bgColor,
                             ),
                           ),
+
                           GestureDetector(
                             onTap: () {
                               displayMore(
@@ -374,10 +375,20 @@ class _StateTrackerState extends State<StateTracker> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          String conDes = con == 0 ? '' : '\n😷 Confirmed Cases  : $con';
+          String recDes = recc == 0 ? '' : '\n💝 Recovered Cases : $recc';
+
+          String testDec = test == 0 ? '' : '\n🔥 Testings Done : $test ';
+          String vacDec = vacc == 0 ? '' : '\n💉 Vaccinated : $vacc ';
+          String decDes = dec == 0 ? '' : '\n👼 Deaths : $dec ';
+
+          Share.share(
+              '📌 In $stateSelected \n$conDes $recDes $testDec $vacDec $decDes \n\n🙏 Stay Safe and take safety precautions. \n🎯 For more download the app today. https://play.google.com',
+              subject: 'Latest Covid Data of $stateSelected');
           print(
               'Conf : ${con.toString()}, \n Rec: ${recc.toString()},${test.toString()},${vacc.toString()},${d1.toString()},${d2.toString()},${dec.toString()}');
         },
-        child: Icon(Icons.share),
+        child: FaIcon(FontAwesomeIcons.shareSquare),
       ),
     );
   }
