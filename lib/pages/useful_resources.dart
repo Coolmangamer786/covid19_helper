@@ -1,9 +1,12 @@
+import 'package:covid19_helper/ads/adstate.dart';
 import 'package:covid19_helper/api_methods/api_methods.dart';
 import 'package:covid19_helper/api_methods/model.dart';
 import 'package:covid19_helper/webpage/webpage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,6 +21,24 @@ class RedirectedPage extends StatefulWidget {
 }
 
 class _RedirectedPageState extends State<RedirectedPage> {
+  late BannerAd banner;
+
+  @override
+  void didChangeDependencies() {
+
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        banner = BannerAd(
+            size: AdSize.banner,
+            adUnitId: adState.bannerAdUnitId,
+            listener: adState.listener,
+            request: AdRequest())
+            ..load();
+      });
+    });
+  }
   void _launchURL(url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
@@ -47,7 +68,19 @@ class _RedirectedPageState extends State<RedirectedPage> {
                   child: Text('Something fishy'),
                 );
               } else {
-                return buildChart(users!);
+                return Column(
+                  children: [
+                    Expanded(child: buildChart(users!)),
+
+                      Container(
+                    color: bgColor,
+                    height: 50,
+                    child: AdWidget(
+                      ad: banner,
+                    ),
+                  ),
+                  ],
+                );
               }
           }
         },
@@ -66,9 +99,10 @@ class _RedirectedPageState extends State<RedirectedPage> {
             onTap: () {
               print('Being tapped ${user.name}');
               if (widget.name == 'Whatsapp' || widget.name == 'Telegram') {
-                print('insid wp or tele');
+                print('inside wp or tele');
                 _launchURL(user.links);
-              } else {
+              }
+               else {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -83,8 +117,9 @@ class _RedirectedPageState extends State<RedirectedPage> {
               icon: FaIcon(FontAwesomeIcons.shareSquare),
               onPressed: () {
                 Share.share(
-                    '📌 For ${widget.name} \n🔥 Visit : ${user.name}\n⚡ link : ${user.links} \n\n 🎯 For more download the app today. https://play.google.com',subject: 'For latest ${widget.name}');
-              },
+                    '📌 For ${widget.name} \n🔥 Visit : ${user.name}\n⚡ link : ${user.links} \n\n 🎯 For more download the app today. https://bit.ly/3hqlbtV',subject: 'For latest ${widget.name}');
+
+                },
             ),
           );
         });

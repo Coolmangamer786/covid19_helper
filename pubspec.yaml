@@ -1,5 +1,5 @@
 name: covid19_helper
-description: A new Flutter project.
+description: An app that help people to fight against covid19
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -42,6 +42,7 @@ dependencies:
   connectivity: ^3.0.6
   showcaseview: ^1.1.0
   share: ^2.0.4
+  google_mobile_ads: ^0.13.2
 
 
 dev_dependencies:

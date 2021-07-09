@@ -14,6 +14,7 @@ class RoundedContainer2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height1=MediaQuery.of(context).size.height;
     return Container(
         decoration: BoxDecoration(
           color: boxColor,
@@ -23,7 +24,7 @@ class RoundedContainer2 extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        height: 75,
+      height: height1<720?MediaQuery.of(context).size.height*.09:75,
         // width: MediaQuery.of(context).size.width * .8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

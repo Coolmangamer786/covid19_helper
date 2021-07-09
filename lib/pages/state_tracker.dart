@@ -1,8 +1,12 @@
+
+import 'package:covid19_helper/ads/adstate.dart';
 import 'package:covid19_helper/api_methods/api_methods.dart';
 import 'package:covid19_helper/constants.dart';
 import 'package:covid19_helper/containers/rounded_container.dart';
 import 'package:covid19_helper/state_changer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,19 +27,20 @@ class _StateTrackerState extends State<StateTracker> {
   GlobalKey _nine = GlobalKey();
   GlobalKey _ten = GlobalKey();
 
+
   String stateSelected = '';
   late int vacc, recc, test = 0, con = 0, dec = 0, d1 = 0, d2 = 0;
   var today = DateTime.now();
   @override
   void initState() {
     super.initState();
-
     stateSelected = StateNotifier.getStateName() ?? 'West Bengal';
     //  WidgetsBinding.instance!.addPostFrameCallback(
     //   (_) => ShowCaseWidget.of(context)!.startShowCase([
     //     _six,_seven,_eight,_nine,_ten
     //   ]),
     // );
+  
   }
 
   List<String> stateName = [
@@ -76,7 +81,24 @@ class _StateTrackerState extends State<StateTracker> {
     'Uttarakhand',
     'West Bengal',
   ];
+late BannerAd banner;
 
+  @override
+  void didChangeDependencies() {
+
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        banner = BannerAd(
+            size: AdSize.banner,
+            adUnitId: adState.bannerAdUnitId,
+            listener: adState.listener,
+            request: AdRequest())
+            ..load();
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final Color bgColor = Theme.of(context).accentColor == KTealLight
@@ -87,6 +109,8 @@ class _StateTrackerState extends State<StateTracker> {
         : kBlackBack;
 
     SharedPreferences preferences;
+
+
 
     displayShowcase() async {
       preferences = await SharedPreferences.getInstance();
@@ -109,6 +133,8 @@ class _StateTrackerState extends State<StateTracker> {
             .startShowCase([_six, _seven, _eight, _nine, _ten]);
       }
     });
+
+    
 
     showVaccineStatus(int dose1, int dose2, int total) {
       return showDialog(
@@ -219,16 +245,47 @@ class _StateTrackerState extends State<StateTracker> {
           });
     }
 
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          stateSelected,
-          style: TextStyle(color: textColor),
+        title:Showcase(
+          key: _six,
+          description: 'Click Here To Change State',
+          child: DropdownButton(
+            isExpanded: true,
+            style: TextStyle(color: textColor,fontSize: 20,fontWeight: FontWeight.w500),
+            dropdownColor: bgColor,
+            underline: SizedBox(height: 0,
+            ),
+icon: FaIcon(FontAwesomeIcons.caretDown),
+            iconEnabledColor: textColor,
+            value: stateSelected,
+            onChanged: (newValue) {
+              setState(() {
+                this.stateSelected =
+                    newValue.toString();
+                StateNotifier.setStateName(
+                    stateSelected);
+              });
+            },
+            items: stateName.map((valueItem) {
+              return DropdownMenuItem(
+                  child: Text(valueItem),
+                  value: valueItem);
+            }).toList(),
+          ),
         ),
+
+        // Text(
+        //   stateSelected,
+        //   style: TextStyle(color: textColor),
+        // ),
         elevation: 0,
         backgroundColor: bgColor,
         actions: [
+
+
           Showcase(
             key: _eight,
             description: 'Click here for vaccine status',
@@ -240,39 +297,41 @@ class _StateTrackerState extends State<StateTracker> {
               color: textColor,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('How to use'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '📌 Click on  -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\nChange State using the Dropdown Menu 🔻 \n\nClick on 😎 Share Button to share the data with others.',
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('ok'))
-                      ],
-                    );
-                  });
-            },
-            icon: FaIcon(
-              FontAwesomeIcons.infoCircle,
-              color: textColor,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     showDialog(
+          //         context: context,
+          //         builder: (context) {
+          //           return AlertDialog(
+          //             title: Text('How to use'),
+          //             content: Column(
+          //               mainAxisSize: MainAxisSize.min,
+          //               children: [
+          //                 Text(
+          //                   '📌 Click on  -\n🎯 Confiremed,\n🎯 Recovered,\n🎯 Testings,\n🎯 Decreased \nfor more info.\n\nAnd click 💉 Vaccinated for Vaccine Status.\n\nChange State using the Dropdown Menu 🔻 \n\nClick on 😎 Share Button to share the data with others.',
+          //                   textAlign: TextAlign.left,
+          //                 ),
+          //               ],
+          //             ),
+          //             actions: [
+          //               TextButton(
+          //                   onPressed: () {
+          //                     Navigator.pop(context);
+          //                   },
+          //                   child: Text('ok'))
+          //             ],
+          //           );
+          //         });
+          //   },
+          //   icon: FaIcon(
+          //     FontAwesomeIcons.infoCircle,
+          //     color: textColor,
+          //
+          //   ),
+          // ),
         ],
       ),
+
       body: Container(
         color: bgColor,
         child: FutureBuilder(
@@ -285,144 +344,132 @@ class _StateTrackerState extends State<StateTracker> {
                 valueColor: AlwaysStoppedAnimation<Color>(kPinkCont),
               )));
             } else {
-              return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      tileColor: Colors.black,
-                      title: Showcase(
-                        key: _nine,
-                        description:
-                            'Tap in Conmiremd,Recovered,Testings,Vaccinated,Decreased for detailed info',
-                        child: Column(
-                          children: [
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: Text(stateSelected,style: kSubHeadText.copyWith(color:textColor),),
-                            // ),
-
-                            GestureDetector(
-                              onTap: () {
-                                displayMore(
-                                    'Confirmed Cases',
-                                    snapshot.data[index].confirmed,
-                                    'Please be Stay Safe 🔒 and get Vaccinated 💉 as soon as possible.');
-                              },
-                              child: RoundedContainer(
-                                borderColor: kPinkCont,
-                                item: 'CONFIRMED CASES',
-                                data: snapshot.data[index].confirmed.toString(),
-                                boxColor: bgColor,
-                              ),
-                            ),
-
-                            GestureDetector(
-                              onTap: () {
-                                displayMore(
-                                    'Recovered Cases',
-                                    snapshot.data[index].recovered,
-                                    'Never loose hope we can always get Recovered 💝 Stay Strong 💪 we will fight together against the Virus 👿.');
-                              },
-                              child: RoundedContainer(
-                                borderColor: kYellowCont,
-                                item: 'RECOVERED CASES',
-                                data: snapshot.data[index].recovered.toString(),
-                                boxColor: bgColor,
-                              ),
-                            ),
-
-                            GestureDetector(
-                              onTap: () {
-                                displayMore(
-                                    'Testings Done',
-                                    snapshot.data[index].tested,
-                                    'For Testings please TESTING 🔥 visit  on Resources 🐻.');
-                              },
-                              child: RoundedContainer(
-                                borderColor: kGreenCont,
-                                item: 'Testings',
-                                data: snapshot.data[index].tested.toString(),
-                                boxColor: bgColor,
-                              ),
-                            ),
-
-                            GestureDetector(
-                              onTap: () {
-                                showVaccineStatus(
-                                    snapshot.data[index].dose1,
-                                    snapshot.data[index].dose2,
-                                    snapshot.data[index].vaccinated);
-                              },
-                              child: RoundedContainer(
-                                borderColor: kBlueCont,
-                                item: 'Vaccinated',
-                                data:
-                                    snapshot.data[index].vaccinated.toString(),
-                                boxColor: bgColor,
-                              ),
-                            ),
-
-                            GestureDetector(
-                              onTap: () {
-                                displayMore(
-                                    'Deaths',
-                                    snapshot.data[index].deceased,
-                                    'We have lost lot of peoples in our surrounding,Please be Safe 🔒 and Take Safety precautions');
-                              },
-                              child: RoundedContainer(
-                                borderColor: kVioletCont,
-                                item: 'Decreased',
-                                data: snapshot.data[index].deceased.toString(),
-                                boxColor: bgColor,
-                              ),
-                            ),
-                            shareData(
-                                snapshot.data[index].confirmed,
-                                snapshot.data[index].recovered,
-                                snapshot.data[index].tested,
-                                snapshot.data[index].vaccinated,
-                                snapshot.data[index].dose1,
-                                snapshot.data[index].dose2,
-                                snapshot.data[index].deceased),
-                            Showcase(
-                              key: _six,
-                              description: 'Click here to change State',
-                              child: Container(
-                                // decoration: BoxDecoration(color: Colors.black,borderRadius: BorderRadius.circular(20)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: DropdownButton(
-                                    style: TextStyle(color: textColor),
-                                    dropdownColor: bgColor,
-                                    underline: Container(
-                                      color: textColor,
-                                      height: 2,
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: snapshot.data.length ,
+                        itemBuilder: (BuildContext context, int index) {
+                           {
+                            return ListTile(
+                              tileColor: Colors.black,
+                              title: Showcase(
+                                key: _nine,
+                                description:
+                                    'Tap in Conmiremd,Recovered,Testings,Vaccinated,Decreased for detailed info',
+                                child: Column(
+                                  children: [
+                                    // Padding(
+                                    //   padding: const EdgeInsets.all(8.0),
+                                    //   child: Text(stateSelected,style: kSubHeadText.copyWith(color:textColor),),
+                                    // ),
+                  
+                                    GestureDetector(
+                                      onTap: () {
+                                        displayMore(
+                                            'Confirmed Cases',
+                                            snapshot.data[index].confirmed,
+                                            'Please be Stay Safe 🔒 and get Vaccinated 💉 as soon as possible.');
+                                      },
+                                      child: RoundedContainer(
+                                        borderColor: kPinkCont,
+                                        item: 'CONFIRMED CASES',
+                                        data:
+                                            snapshot.data[index].confirmed.toString(),
+                                        boxColor: bgColor,
+                                      ),
                                     ),
-                                    iconEnabledColor: textColor,
-                                    value: stateSelected,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        this.stateSelected =
-                                            newValue.toString();
-                                        StateNotifier.setStateName(
-                                            stateSelected);
-                                      });
-                                    },
-                                    items: stateName.map((valueItem) {
-                                      return DropdownMenuItem(
-                                          child: Text(valueItem),
-                                          value: valueItem);
-                                    }).toList(),
-                                  ),
+                  
+                                    GestureDetector(
+                                      onTap: () {
+                                        displayMore(
+                                            'Recovered Cases',
+                                            snapshot.data[index].recovered,
+                                            'Never loose hope we can always get Recovered 💝 Stay Strong 💪 we will fight together against the Virus 👿.');
+                                      },
+                                      child: RoundedContainer(
+                                        borderColor: kYellowCont,
+                                        item: 'RECOVERED CASES',
+                                        data:
+                                            snapshot.data[index].recovered.toString(),
+                                        boxColor: bgColor,
+                                      ),
+                                    ),
+                  
+                                    GestureDetector(
+                                      onTap: () {
+                                        displayMore(
+                                            'Testings Done',
+                                            snapshot.data[index].tested,
+                                            'For Testings please TESTING 🔥 visit  on Resources 🐻.');
+                                      },
+                                      child: RoundedContainer(
+                                        borderColor: kGreenCont,
+                                        item: 'Testings',
+                                        data: snapshot.data[index].tested.toString(),
+                                        boxColor: bgColor,
+                                      ),
+                                    ),
+                  
+                                    GestureDetector(
+                                      onTap: () {
+                                        showVaccineStatus(
+                                            snapshot.data[index].dose1,
+                                            snapshot.data[index].dose2,
+                                            snapshot.data[index].vaccinated);
+                                      },
+                                      child: RoundedContainer(
+                                        borderColor: kBlueCont,
+                                        item: 'Vaccinated',
+                                        data: snapshot.data[index].vaccinated
+                                            .toString(),
+                                        boxColor: bgColor,
+                                      ),
+                                    ),
+                  
+                                    GestureDetector(
+                                      onTap: () {
+                                        displayMore(
+                                            'Deaths',
+                                            snapshot.data[index].deceased,
+                                            'We have lost lot of peoples in our surrounding,Please be Safe 🔒 and Take Safety precautions');
+                                      },
+                                      child: RoundedContainer(
+                                        borderColor: kVioletCont,
+                                        item: 'Decreased',
+                                        data:
+                                            snapshot.data[index].deceased.toString(),
+                                        boxColor: bgColor,
+                                      ),
+                                    ),
+                                    shareData(
+                                        snapshot.data[index].confirmed,
+                                        snapshot.data[index].recovered,
+                                        snapshot.data[index].tested,
+                                        snapshot.data[index].vaccinated,
+                                        snapshot.data[index].dose1,
+                                        snapshot.data[index].dose2,
+                                        snapshot.data[index].deceased),
+
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
+                            );
+                          }
+                        }),
+                  ),
+
+                      Container(
+                    color: bgColor,
+                    height: 50,
+                    child: AdWidget(
+                      ad: banner,
+                    ),
+                  ),
+
+                ],
+              );
             }
           },
         ),
@@ -440,7 +487,7 @@ class _StateTrackerState extends State<StateTracker> {
             String decDes = dec == 0 ? '' : '\n👼 Deaths : $dec ';
 
             Share.share(
-                '📌 In $stateSelected \n$conDes $recDes $testDec $vacDec $decDes \n\n🙏 Stay Safe and take safety precautions. \n🎯 For more download the app today. https://play.google.com',
+                '📌 In $stateSelected \n$conDes $recDes $testDec $vacDec $decDes \n\n🙏 Stay Safe and take safety precautions. \n🎯 For more download the app today. https://bit.ly/3hqlbtV',
                 subject: 'Latest Covid Data of $stateSelected');
             print(
                 'Conf : ${con.toString()}, \n Rec: ${recc.toString()},${test.toString()},${vacc.toString()},${d1.toString()},${d2.toString()},${dec.toString()}');
@@ -462,4 +509,7 @@ class _StateTrackerState extends State<StateTracker> {
     dec = decrease;
     return SizedBox();
   }
+
+
+
 }

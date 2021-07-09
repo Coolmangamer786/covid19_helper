@@ -92,7 +92,7 @@ class _HomepageState extends State<Homepage> {
                             txtColor: txtColor,
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 2),
                             child: AnimatedTextKit(
                               animatedTexts: [
                                 TypewriterAnimatedText(
@@ -140,7 +140,7 @@ class _HomepageState extends State<Homepage> {
                             key: _one,
                             description: 'Click here for Vaccine Registration',
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.fromLTRB(8,8,8,6),
                               child: GestureDetector(
                                 onTap: () {
                                   _launchURL('https://www.cowin.gov.in/');
@@ -158,7 +158,7 @@ class _HomepageState extends State<Homepage> {
                             key: _two,
                             description: 'Click Here for Vaccine Details',
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -167,7 +167,7 @@ class _HomepageState extends State<Homepage> {
                                           builder: (context) => Webpage(
                                               pageName: 'Vaccine Details',
                                               pageUrl:
-                                                  'https://coolmangamer786.github.io/covid19resources/vaccine_details.html')));
+                                                  'https://bit.ly/2TQIC6Q')));
                                 },
                                 child: RoundedContainer2(
                                   title: 'vaccine details',
@@ -182,7 +182,7 @@ class _HomepageState extends State<Homepage> {
                             key: _three,
                             description: 'Click Here for Covid Testings ',
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -203,7 +203,7 @@ class _HomepageState extends State<Homepage> {
                             key: _four,
                             description: "Click Here for Do's and dont's ",
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -212,7 +212,7 @@ class _HomepageState extends State<Homepage> {
                                           builder: (context) => Webpage(
                                               pageName: "Do's and Dont's",
                                               pageUrl:
-                                                  'https://coolmangamer786.github.io/covid19resources/index.html')));
+                                                  'https://bit.ly/3xwjS2h')));
                                 },
                                 child: RoundedContainer2(
                                   title: "Do's and Dont's",
@@ -227,7 +227,7 @@ class _HomepageState extends State<Homepage> {
                             key: _five,
                             description: 'Click Here for Helpful Spreadsheets ',
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -265,9 +265,8 @@ class HomepageText extends StatelessWidget {
   final Color txtColor;
   @override
   Widget build(BuildContext context) {
-    var height1 = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 3),
       child: Text(
         title,
         style: GoogleFonts.bebasNeue(

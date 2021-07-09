@@ -1,4 +1,5 @@
 import 'package:covid19_helper/theme_changer.dart';
+import 'package:covid19_helper/webpage/webpage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
@@ -67,14 +68,27 @@ class _UserSettingsState extends State<UserSettings> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => buildDemos(context, select)));
+                builder: (context) => Webpage(
+                    pageName: 'How to use',
+                    pageUrl: 'https://bit.ly/3yCeFWS')));
       } else if (select == 'Share with friends') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => shareWithothers(context),
-          ),
-        );
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text('Share with friends'),
+                  content: Text('Thanks for the needful 💌. \nTap on Share Now to share with others'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Share.share(
+                            'I am using Covid19 Helper for latest Covid Stats, Useful resources, and much more features🔥.\n\n🎯If you want those features download the Covid19 Helper app now. https://bit.ly/3hqlbtV');
+                        Navigator.pop(context);
+                      },
+                      child: Text('Share Now'),
+                    ),
+                    
+                  ],
+                ));
       } else if (select == 'Request a feature') {
         Navigator.push(
           context,
@@ -86,11 +100,13 @@ class _UserSettingsState extends State<UserSettings> {
       } else if (select == 'About') {
         showAboutDialog(
           context: context,
-          applicationName: 'COVID 19 HELPER',
+          applicationName: 'COVID19 HELPER',
           applicationVersion: '1.0.0',
           applicationLegalese:
-              '💝 Thanks for using this app \nThis app is developed by 😎 Coolman Gamer.\n'+
-              'If you face in any difficulties try watching how to use',
+              '💝 Thanks for using this app \nThis app is developed by 😎 Coolman Gamer.\n' +
+                  'If you face in any difficulties try watching how to use'+
+                  '\nThere is also a feature where you can request and report a problem.'+
+                  'If you face more difficulties try contacting us.',
         );
       }
     }
@@ -114,25 +130,6 @@ class _UserSettingsState extends State<UserSettings> {
               },
             );
           }),
-    );
-  }
-
-  Widget buildDemos(BuildContext context, String selectName) {
-    return Container(
-      child: Center(child: Text('Working on $selectName')),
-    );
-  }
-
-  Widget reqMore(BuildContext context) {
-    return AlertDialog(
-      title: Text('Request a feature'),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(),
-        ],
-      ),
     );
   }
 
@@ -216,68 +213,6 @@ class _UserSettingsState extends State<UserSettings> {
                 ))
           ],
         ),
-      ),
-    );
-  }
-
-  Widget shareWithothers(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        'Share with others',
-      )),
-      body: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * .8,
-            width: double.infinity,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '💪 A single share can save someones life.',
-                    style: kOnlyText.copyWith(fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    '🐻 This app can be beneficial to lot of people',
-                    style: kOnlyText.copyWith(fontWeight: FontWeight.w500),
-                    
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    '😷 Stay Safe and Follow Safety Covid Measures.',
-                    style: kOnlyText.copyWith(fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    '💝 Thanks You for Using the App',
-                    style: kOnlyText.copyWith(fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
-            ),
-          ),
-          ElevatedButton(
-              onPressed: () {
-                Share.share('Get Latest Covid Data State and District wise \n' +
-                    'Get Covid Resources \nAmd Much more.\nDownload the app for more.');
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Lets Share '),
-                  FaIcon(FontAwesomeIcons.shareSquare)
-                ],
-              ))
-        ],
       ),
     );
   }

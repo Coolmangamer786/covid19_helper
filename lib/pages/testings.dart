@@ -30,7 +30,7 @@ class _TestingsState extends State<Testings> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: bgColor,
-          title: const Text('Tesings'),
+          title: const Text('Testings'),
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
