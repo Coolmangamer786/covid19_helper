@@ -1,39 +1,48 @@
-import 'package:covid19_helper/ads/adstate.dart';
-import 'package:covid19_helper/pages/firstpage.dart';
-import 'package:covid19_helper/state_changer.dart';
-import 'package:covid19_helper/theme_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
+// ignore_for_file: must_be_immutable
 
-void main() {
+import 'dart:io';
+
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:covid19_helper/pages/firstpage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final initFuture = MobileAds.instance.initialize();
-  final adState = AdState(initFuture);
-  runApp(Provider.value(value: adState,builder: (context,child)=>MyApp()));
-  StateNotifier.init();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  HttpOverrides.global = MyHttpOverrides();
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+  runApp(MyApp(savedThemeMode: savedThemeMode));
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({Key? key, this.savedThemeMode}) : super(key: key);
+  AdaptiveThemeMode? savedThemeMode;
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: Consumer<ThemeNotifier>(
-        builder: (context, ThemeNotifier notifier, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: "Covid19 Helper",
-            theme: notifier.darkTheme ? light : dark,
-            home: FirstPage(),
-          );
-        },
+    return AdaptiveTheme(
+      light: ThemeData(
+        brightness: Brightness.light,
+      ),
+      dark: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      initial: savedThemeMode ?? AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => GetMaterialApp(
+        title: 'Covid 19 Helper',
+        theme: theme,
+        darkTheme: darkTheme,
+        home: const FirstPage(),
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
